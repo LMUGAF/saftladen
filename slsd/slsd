@@ -1,0 +1,70 @@
+#!/usr/bin/python3
+
+import signal
+import conf
+from log import Log
+from argparse import ArgumentParser
+import os
+
+
+
+
+def sigExit(sigNr, frame):
+	Log.log(Log.LVL_DEBUG2, Log.SRV_MAIN, "Got shutdown signal (%i)" % sigNr)
+
+
+def sigFdReset(sigNr, frame):
+	Log.log(Log.LVL_DEBUG2, Log.SRV_MAIN, "Got signal to reopen files (%i)" % sigNr)
+	for sink in logFileSinks:
+		sink.openFile()
+
+
+## Make shure we are dealing here with a real OS
+if os.name != "posix":
+	print("Hahahaha. NO!!")
+	exit(1)
+
+
+## Configure from command line
+parser = ArgumentParser(
+	description = "kombod is an auxilary daemon for the kommilitonen bot and does time consuming jobs."
+)
+
+parser.add_argument(
+	'-n', '--no-daemon',
+	action="store_false",
+	help="Don't dork to background."
+)
+
+parser.add_argument(
+	'-c', '--config',
+	default="/etc/slsd.xml",
+	metavar="FILE",
+	help="The configuration file path."
+)
+
+args = parser.parse_args()
+
+
+## Configure from file
+tree = conf.read(args.config)
+d = conf.daemon(tree)
+
+
+conf.logStdoutSink(tree)
+conf.logSyslogSink(tree)
+conf.logFileSinks(tree)
+
+
+if args.no_daemon == True:
+	d.daemonize()
+
+
+## Register signals
+signal.signal(signal.SIGTERM, sigExit)
+signal.signal(signal.SIGINT,  sigExit)
+signal.signal(signal.SIGHUP,  sigFdReset)
+
+
+## RUN
+Log.log(Log.LVL_INFO, Log.SRV_MAIN, "Started")

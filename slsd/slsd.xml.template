@@ -1,0 +1,26 @@
+<slsd>
+	<!-- DAEMON -->
+	<user>slsd</user>
+	<group>slsd</group>
+	
+	<pidfile mode="666">/tmp/slsd.pid</pidfile>
+	<errfile mode="666">/tmp/slsd.err</errfile>
+	
+	
+	<!-- LOGGER -->
+	<log>
+		<file path="/tmp/slsd.log" mode="666">
+			<timeformat>%M:%S</timeformat>
+			<filter level="*" service="*" log="t" />
+		</file>
+		
+		<stdout>
+			<timeformat>%M:%S</timeformat>
+			<filter level="*" service="*" log="t" />
+		</stdout>
+		
+		<syslog>
+			<filter level="*" service="*" log="f" />
+		</syslog>
+	</log>
+</slsd>
