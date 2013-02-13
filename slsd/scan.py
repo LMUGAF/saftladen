@@ -58,5 +58,5 @@ class Scanner(Thread):
 class StdinScanner(Scanner):
 	def run(self):
 		for line in sys.stdin:
-			self._notifyListeners(line)
+			self._notifyListeners(line[:-1])
 

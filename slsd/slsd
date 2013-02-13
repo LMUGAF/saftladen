@@ -73,7 +73,7 @@ Log.log(Log.LVL_INFO, Log.SRV_MAIN, "Started")
 
 
 def port(code):
-	print("Scanned: %s" % code)
+	print("Scanned: \"%s\"" % code)
 	return ERoutingResult.STOP_OK
 
 router = Router()
