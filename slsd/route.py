@@ -1,4 +1,5 @@
 from log import Log
+from aux import synchronized_method
 
 
 
@@ -33,6 +34,7 @@ class Router:
 		self.__routes.remove(route)
 	
 	
+	@synchronized_method
 	def scanned(self, scan):
 		found = False
 		
