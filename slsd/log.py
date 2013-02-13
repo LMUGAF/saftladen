@@ -195,8 +195,10 @@ class Log:
 	LVL_ERROR     = LVL.add("Error",   1)
 	
 	SRV = LogGroup(LogGroup.COLOR_TEXT)
-	SRV_MAIN      = SRV.add("Main", 1)
-	SRV_MISC      = SRV.add("Misc", 2)
+	SRV_MAIN      = SRV.add("Main",    1)
+	SRV_SCAN      = SRV.add("Scan",    2)
+	SRV_ROUTE     = SRV.add("Router",  3)
+	SRV_MISC      = SRV.add("Misc",    4)
 	
 	
 	def addSink(sink):

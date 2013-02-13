@@ -4,6 +4,7 @@ import signal
 import conf
 from log import Log
 from scan import *
+from route import *
 from argparse import ArgumentParser
 import os
 
@@ -70,12 +71,14 @@ signal.signal(signal.SIGHUP,  sigFdReset)
 ## RUN
 Log.log(Log.LVL_INFO, Log.SRV_MAIN, "Started")
 
-class Foo:
-	def scanned(self, code):
-		print("Scanned: %s" % code)
 
-foo = Foo()
+def port(code):
+	print("Scanned: %s" % code)
+	return ERoutingResult.STOP_OK
+
+router = Router()
 
 scanner = StdinScanner("stdinscanner")
-scanner.addListener(foo)
+scanner.addListener(router)
 
+router.addRoute(Route(None, "USER:", port))
