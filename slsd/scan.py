@@ -8,10 +8,10 @@ class Scan:
 		self.__code    = code
 	
 	def getScanner(self):
-		self.__scanner
+		return self.__scanner
 	
 	def getCode(self):
-		self.__code
+		return self.__code
 
 
 
