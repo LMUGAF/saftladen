@@ -198,7 +198,10 @@ class Log:
 	SRV_MAIN      = SRV.add("Main",    1)
 	SRV_SCAN      = SRV.add("Scan",    2)
 	SRV_ROUTE     = SRV.add("Router",  3)
-	SRV_MISC      = SRV.add("Misc",    4)
+	SRV_HANDLER   = SRV.add("Handler", 4)
+	SRV_DEB_H     = SRV.add("Deb. H.", 5)
+	SRV_PROC      = SRV.add("Proc",    6)
+	SRV_MISC      = SRV.add("Misc",    7)
 	
 	
 	def addSink(sink):
