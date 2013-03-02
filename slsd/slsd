@@ -10,7 +10,13 @@ import os
 
 
 def sigExit(sigNr, frame):
+	global scanners
+	global router
+	
 	Log.log(Log.LVL_DEBUG2, Log.SRV_MAIN, "Got shutdown signal (%i)" % sigNr)
+	
+	for scanner in scanners:
+		scanners[scanner].removeListener(router)
 
 
 def sigFdReset(sigNr, frame):
