@@ -32,10 +32,12 @@ class Scanner(Thread):
 	
 	
 	def removeListener(self, listener):
-		self.__listeners.remove(listener)
-		
-		if len(self.__listeners) == 0:
-			self.stop()
+		if listener in self.__listeners:
+			self.__listeners.remove(listener)
+			
+			if len(self.__listeners) == 0:
+				self.__running = False
+				self._stopAction()
 	
 	
 	def _notifyListeners(self, code):
