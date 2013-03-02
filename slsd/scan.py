@@ -27,8 +27,8 @@ class Scanner(Thread):
 			self.__listeners.append(listener)
 		
 		if len(self.__listeners) == 1:
-			self.start()
 			self.__running = True
+			self.start()
 	
 	
 	def removeListener(self, listener):
@@ -45,14 +45,10 @@ class Scanner(Thread):
 			listener.scanned(scan)
 	
 	
-	def __stopAction(self):
+	def _stopAction(self):
 		pass
 	
 	
-	def stop(self):
-		self.__running = False
-		self.__stopAction()
-
-
-
+	def _shouldRun(self):
+		return self.__running
 
