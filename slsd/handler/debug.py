@@ -1,10 +1,11 @@
+import conf
 from log import Log
-import mpd
 from route import ERoutingResult
-from sh import sh
 
-
-class DebugScanhandler:
+class DebugScanhandler(conf.HandlerPlugin):
+	elName = "debughandler"
+	
+	
 	def __init__(self):
 		self.resetPort()
 	
@@ -13,10 +14,25 @@ class DebugScanhandler:
 		self.__cnt[num] += 1
 		Log.log(
 			Log.LVL_DEBUG2, Log.SRV_DEB_H,
-			"Debug port %i triggered with \"%s\"the %ith time" %
+			"Debug port %i triggered with \"%s\" the %ith time" %
 			(num, code, self.__cnt[num])
 		)
 		return ERoutingResult.STOP_OK
+	
+	
+	def getPort(self, name):
+		if   name == "trap0": return self.trap0Port
+		elif name == "trap1": return self.trap1Port
+		elif name == "trap2": return self.trap2Port
+		elif name == "trap3": return self.trap3Port
+		elif name == "trap4": return self.trap4Port
+		elif name == "trap5": return self.trap5Port
+		elif name == "trap6": return self.trap6Port
+		elif name == "trap7": return self.trap7Port
+		elif name == "trap8": return self.trap8Port
+		elif name == "trap9": return self.trap9Port
+		elif name == "reset": return self.resetPort
+		else: raise Exception("DebugScanhandler has no port %s" % name)
 	
 	
 	def trap0Port(self, code):
@@ -61,39 +77,11 @@ class DebugScanhandler:
 	
 	def resetPort(self, code = ""):
 		self.__cnt = [0]*10
-		return ERoutingResult.STOP_OK
-
-
-
-class MpdScanhandler:
-	def __init__(self, hostname, port = 6600):
-		self.__client = mpd.MPDClient()
-		self.__client.timeout = 10
-		self.__client.idletimeout = None
-		self.__client.connect(hostname, port)
-	
-	
-	def pausePlayPort(self, code):
-		status = self.__client.status()['state']
-		if status == "play" or status == "pause":
-			self.__client.pause()
-		else:
-			self.__client.play()
+		Log.log(Log.LVL_DEBUG2, Log.SRV_DEB_H, "Resetting all debug ports")
 		return ERoutingResult.STOP_OK
 	
 	
-	def nextPort(self, code):
-		self.__client.next()
-		return ERoutingResult.STOP_OK
-
-
-
-class ExecScanhandler:
-	def __init__(self, cmd, timeout = 10):
-		self.__cmd = cmd
-		self.__timeout = timeout
-	
-	def execPort(self, code):
-		sh(self.__cmd, self.__timeout)
-		return ERoutingResult.STOP_OK
-
+	def create(el, name):
+		handler = DebugScanhandler()
+		
+		return handler
