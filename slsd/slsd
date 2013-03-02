@@ -3,13 +3,10 @@
 import signal
 import conf
 from log import Log
-from scan import *
-from route import *
-from scanhandler import *
+from route import Router
 from argparse import ArgumentParser
+from pluginloader import loadPlugins
 import os
-
-
 
 
 def sigExit(sigNr, frame):
@@ -59,8 +56,12 @@ conf.logSyslogSink(tree)
 conf.logFileSinks(tree)
 
 
-if args.no_daemon == True:
-	d.daemonize()
+loadPlugins("scanner")
+loadPlugins("handler")
+
+router = Router()
+scanners = conf.ScannerPlugin.init(tree, router)
+conf.HandlerPlugin.init(tree, router, scanners)
 
 
 ## Register signals
@@ -72,24 +73,5 @@ signal.signal(signal.SIGHUP,  sigFdReset)
 ## RUN
 Log.log(Log.LVL_INFO, Log.SRV_MAIN, "Started")
 
-
-
-
-router = Router()
-
-handler1 = DebugScanhandler()
-handler2 = MpdScanhandler("localhost")
-handler3 = ExecScanhandler("../bla.sh", 3)
-
-scanner = StdinScanner("stdinscanner")
-scanner.addListener(router)
-
-router.addRoute(Route([scanner], "0", handler1.trap0Port))
-router.addRoute(Route([scanner], "1", handler1.trap1Port))
-router.addRoute(Route([scanner], "2", handler1.trap2Port))
-router.addRoute(Route([scanner], "r", handler1.resetPort))
-
-router.addRoute(Route([scanner], "httpÖ--goo.bz-wJyej9",    handler2.pausePlayPort))
-router.addRoute(Route([scanner], "httpÖ--www.shimadyu.eu-", handler2.nextPort))
-
-router.addRoute(Route([scanner], "4004764008049", handler3.execPort))
+if args.no_daemon == True:
+	d.daemonize()
