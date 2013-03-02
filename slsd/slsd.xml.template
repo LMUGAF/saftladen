@@ -7,6 +7,7 @@
 	<errfile mode="666">/tmp/slsd.err</errfile>
 	
 	
+	
 	<!-- LOGGER -->
 	<log>
 		<file path="/tmp/slsd.log" mode="666">
@@ -23,4 +24,115 @@
 			<filter level="*" service="*" log="f" />
 		</syslog>
 	</log>
+	
+	
+	
+	<!-- SCANNERS -->
+	<stdinscanner />
+	
+	
+	
+	<!-- HANDLERS -->
+	<!-- cmd:         The path to the executable which sould be executed     -->
+	<!-- [timeout]:   Maximal execution time in secons (default=10)          -->
+	<!-- {exec}:      Trigger the execution                                  -->
+	<exechandler name="exec" cmd="../bla.sh">
+		<port name="exec">
+			<route domain="exec" />
+		</port>
+	</exechandler>
+	
+	
+	<!-- {trap0(msg)} - {trap9(msg)}:                                        -->
+	<!--              msg and the trigger count of the port will be logged   -->
+	<!-- {reset}:     Resets all trigger counts to 0                         -->
+	<debughandler name="debug">
+		<port name="trap0">
+			<route domain="d0" />
+		</port>
+		
+		<port name="trap1">
+			<route domain="d1" />
+		</port>
+		
+		<port name="trap2">
+			<route domain="d2" />
+		</port>
+		
+		<port name="trap3">
+			<route domain="d3" />
+		</port>
+		
+		<port name="trap4">
+			<route domain="d4" />
+		</port>
+		
+		<port name="trap5">
+			<route domain="d5" />
+		</port>
+		
+		<port name="trap6">
+			<route domain="d6" />
+		</port>
+		
+		<port name="trap7">
+			<route domain="d7" />
+		</port>
+		
+		<port name="trap8">
+			<route domain="d8" />
+		</port>
+		
+		<port name="trap9">
+			<route domain="d9" />
+		</port>
+		
+		<port name="reset">
+			<route domain="r" />
+		</port>
+	</debughandler>
+	
+	
+	<!-- host:        The IP or hostname of the MPD server                   -->
+	<!-- [service]:   Portnumber or service name of the MPD                  -->
+	<!-- {pausePlay}: Toggles between playing and pausing the playlist       -->
+	<!-- {next}:      Plays the next song in the playlist                    -->
+	<!-- {enqueueFile(file)}:                                                -->
+	<!--              Puts file at the end of the playlist and starts        -->
+	<!--              playing it                                             -->
+	<!-- {enqueueId(id)}:                                                    -->
+	<!--              Puts the file with the ID id at the end of the         -->
+	<!--              playlist and starts playing it                         -->
+	<!-- {enqueueFav(key)}:                                                  -->
+	<!--              Puts the file defined by the <fav> with key at the end -->
+	<!--              of the playlist and starts playing it                  -->
+	<!-- <fav key value>:                                                    -->
+	<!--              Defines a favourite for the enqueueFav port. key is    -->
+	<!--              the parameter of the port which should enqueu this     -->
+	<!--              favourite and has to be unique. If value is numeric,   -->
+	<!--              it's the ID of the file, otherwise its the filename.   -->
+	<mpdhandler name="mpd" host="mpd">
+		<port name="pausePlay">
+			<route domain="mpd.pp" />
+		</port>
+		
+		<port name="next">
+			<route domain="mpd.next" />
+		</port>
+		
+		<port name="enqueueFile">
+			<route domain="mpd.file" />
+		</port>
+		
+		<port name="enqueueId">
+			<route domain="mpd.id" />
+		</port>
+		
+		<port name="enqueueFav">
+			<route domain="mpd.fav" />
+		</port>
+		
+		<fav key="1" value="some/file.ogg" />
+		<fav key="2" value="123" />
+	</mpdhandler>
 </slsd>
