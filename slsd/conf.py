@@ -3,9 +3,115 @@ from log import LogStdoutSink
 from log import LogFilterRule
 from log import LogFileSink
 from log import LogSyslogSink
+from route import Route
 from xml.etree.ElementTree import ElementTree
 from daemon import Daemon
 import aux
+
+class XmlMetaPlugin(type):
+	def __init__(self, class_name, bases, namespace):
+		if not hasattr(self, '_plugins'):
+			self._plugins = {}
+		else:
+			self._plugins[self.elName] = self
+			
+			if not hasattr(XmlMetaPlugin, '_elNames'):
+				XmlMetaPlugin._elNames = ["log", "user", "group", "pidfile", "errfile"]
+			else:
+				if self.elName in XmlMetaPlugin._elNames:
+					raise Exception("There is already a registered XML element \"%s\"" % self.elName)
+			XmlMetaPlugin._elNames.append(self.elName)
+			Log.log(
+				Log.LVL_INFO,
+				Log.SRV_MISC,
+				"%s registerd a new %s for XML element \"%s\"" % (
+					class_name,
+					bases[0].__name__,
+					self.elName
+				)
+			)
+			
+			
+			Log.log(
+				Log.LVL_DEBUG2,
+				Log.SRV_MISC,
+				"There are now the following %s: %s" % (
+					bases[0].__name__,
+					", ".join(self._plugins)
+				)
+			)
+			
+			Log.log(
+				Log.LVL_DEBUG2,
+				Log.SRV_MISC,
+				"There are now the following XML elements: %s" % (
+					", ".join(XmlMetaPlugin._elNames)
+				)
+			)
+	
+	def getPlugins(self):
+		return self._plugins
+
+
+
+class XmlPlugin():
+	def foo(cls, tree, router, scanners = None):
+		plugins = cls.getPlugins()
+		res = {}
+		
+		for key in plugins:
+			Log.log(Log.LVL_DEBUG2, Log.SRV_MISC, "Looking for \"%s\"" % key)
+			
+			for element in tree.findall("./%s" % key):
+				name = element.get("name")
+				if name is None:
+					name = "default"
+				
+				if name in res:
+					raise Exception("There is already a \"%s\" handler" % name)
+				
+				
+				handler = plugins[key].create(element, name)
+				
+				if not scanners is None:
+					for portEl in element.findall("./port"):
+						port = handler.getPort(portEl.get("name"))
+						
+						for routeEl in portEl.findall("./route"):
+							routeScanners = []
+							scannersStr = routeEl.get("scanner")
+							domain = routeEl.get("domain")
+							
+							if domain is None:
+								domain = ""
+							
+							if scannersStr is None or scannersStr == "*":
+								for scannerName in scanners:
+									routeScanners.append(scanners[scannerName])
+							else:
+								for scannerName in scannersStr.split(","):
+									routeScanners.append(scanners[scannerName])
+							print("Add route for %s of %s for port %s and domain %s" % (name, key, portEl.get("name"), domain))
+							route = Route(routeScanners, domain, port)
+							router.addRoute(route)
+				else:
+					handler.addListener(router)
+				
+				res[name] = handler
+				
+				Log.log(Log.LVL_INFO, Log.SRV_MISC, "Added \"%s\" scanner named \"%s\"" % (key, name))
+		
+		return res
+
+class ScannerPlugin(XmlPlugin, metaclass=XmlMetaPlugin):
+	def init(tree, router):
+		return XmlPlugin.foo(ScannerPlugin, tree, router)
+
+class HandlerPlugin(XmlPlugin, metaclass=XmlMetaPlugin):
+	def init(tree, router, scanners):
+		return XmlPlugin.foo(HandlerPlugin, tree, router, scanners)
+
+
 
 
 ## Element parsing
