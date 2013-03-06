@@ -36,7 +36,7 @@
 	<!-- cmd:         The path to the executable which sould be executed     -->
 	<!-- [timeout]:   Maximal execution time in secons (default=10)          -->
 	<!-- {exec}:      Trigger the execution                                  -->
-	<exechandler name="exec" cmd="../bla.sh">
+	<exechandler name="exec" cmd="misc/testexec.sh">
 		<port name="exec">
 			<route domain="exec" />
 		</port>
