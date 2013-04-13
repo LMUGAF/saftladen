@@ -1,0 +1,15 @@
+settings {
+	nodaemon   = true,
+	log = all,
+	delay = 1
+}
+
+sync {
+	default.rsync,
+	source = '.',
+	target = '/path/to/mnt/',
+	exclude = {"*.kate-swp", "*.new"},
+	rsync = {
+		copy_links = true,
+	}
+}

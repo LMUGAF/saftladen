@@ -1,0 +1,5 @@
+<?php
+	define('CONF_URL_PATH', '/path/to/index.php');
+	define('CONF_DB_DSN',   'mysql:host=hostname;dbname=sl');
+	define('CONF_DB_USER',  'someuser');
+	define('CONF_DB_PASS',  'topsecret');
