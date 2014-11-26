@@ -1,2 +1,4 @@
 /conf.inc
 /lsyncd.lua
+/vendor/
+composer.lock

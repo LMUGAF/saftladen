@@ -1,3 +1,0 @@
-[submodule "tonic"]
-	path = tonic
-	url = git://github.com/peej/tonic.git

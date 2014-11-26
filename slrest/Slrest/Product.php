@@ -1,6 +1,7 @@
 <?php
 
 namespace Slrest;
+
 use Tonic;
 use PDO;
 
@@ -19,8 +20,8 @@ class Product extends ResourceBase {
 				"amount"      => array("optional" => true,  "type" => PDO::PARAM_STR),
 				"volume"      => array("optional" => true,  "type" => PDO::PARAM_INT),
 				"caffeine"    => array("optional" => true,  "type" => PDO::PARAM_STR),
-				"alcohol"     => array("optional" => true,  "type" => PDO::PARAM_INT)
-				"note"        => array("optional" => true,  "type" => PDO::PARAM_INT)
+				"alcohol"     => array("optional" => true,  "type" => PDO::PARAM_INT),
+				"note"        => array("optional" => true,  "type" => PDO::PARAM_INT),
 				"description" => array("optional" => true,  "type" => PDO::PARAM_INT)
 			)
 		);

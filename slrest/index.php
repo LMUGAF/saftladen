@@ -6,17 +6,12 @@ ini_set('display_errors', True);
 
 
 require_once("conf.inc");
-require_once("Tonic/Autoloader.php");
-
-
-new Tonic\Autoloader("Slrest");
-
+require_once("vendor/autoload.php");
 
 
 $app = new Tonic\Application(array(
 	'mount' => array('Slrest' => CONF_URL_PATH),
 	'load' => 'Slrest/*Resource.php'
-//	'cache' => new Tonic\MetadataCache('/tmp/tonic.cache')
 ));
 
 $request = new Tonic\Request();
@@ -26,7 +21,7 @@ if($request->contentType == 'application/json') {
 	$request->data = json_decode($request->data);
 }
 else {
-	throw Exception("Invalid Content-type");
+	throw \Exception("Invalid Content-type");
 }
 
 $resource = $app->getResource($request);
