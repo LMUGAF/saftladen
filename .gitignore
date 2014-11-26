@@ -37,3 +37,5 @@ nosetests.xml
 
 /slsd/slsd.xml
 *.vpp~*
+
+/CACHEDIR.TAG
