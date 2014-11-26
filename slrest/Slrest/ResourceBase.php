@@ -17,7 +17,19 @@ class ResourceBase extends Tonic\Resource {
 		parent::__construct($app, $request, $urlParams);
 		$this->tabName = $tabName;
 		$this->cols    = $cols;
-		$this->db = new PDO(CONF_DB_DSN, CONF_DB_USER, CONF_DB_PASS);
+		$this->db = new PDO(CONF_DB_DSN, CONF_DB_USER, CONF_DB_PASS, array(
+			// Trow real (and hence catchable) exceptions instead of PHP errors
+			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+			
+			// Retrun rows as accociative arrays with the row name as the key
+			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			
+			// Return INTs as ints (requires php5-mysqlnd (native driver))
+			PDO::ATTR_EMULATE_PREPARES   => false,
+			
+			// Return the number of found, not changed, rows on UPDATE queries
+			PDO::MYSQL_ATTR_FOUND_ROWS   => true
+		));
 	}
 	
 	function pdoSet(&$values) {
