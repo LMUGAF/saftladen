@@ -222,9 +222,9 @@ def logGroup(xmlEl, name, group):
 	
 	## List of group items
 	else:
-		for partText in ",".split(fullText):
+		for partText in fullText.split(","):
 			partText = partText.strip()
-			part = group.getByName(serviceText)
+			part = group.getByName(partText)
 			result.append(part)
 	
 	return result
