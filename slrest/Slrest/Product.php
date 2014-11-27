@@ -12,7 +12,7 @@ class Product extends ResourceBase {
 			$app,
 			$request,
 			$urlParams,
-			"transaction",
+			"product",
 			array(
 				"name"        => array("optional" => true,  "type" => PDO::PARAM_STR),
 				"ean"         => array("optional" => false, "type" => PDO::PARAM_STR),
