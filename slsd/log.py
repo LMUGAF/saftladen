@@ -192,6 +192,7 @@ class Log:
 	LVL_INFO      = LVL.add("Info",    2)
 	LVL_NOTICE    = LVL.add("Notice",  3)
 	LVL_WARN      = LVL.add("Warn",    5)
+	LVL_DISPLAY   = LVL.add("Display", 3)
 	LVL_ERROR     = LVL.add("Error",   1)
 	
 	SRV = LogGroup(LogGroup.COLOR_TEXT)
