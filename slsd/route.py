@@ -12,6 +12,7 @@ class ERoutingResult:
 class Router:
 	def __init__(self):
 		self.__routes = []
+		self.__sorted = False
 	
 	
 	def addRoute(self, route):
@@ -27,10 +28,8 @@ class Router:
 				raise Exception()
 		
 		## Now we can safely add the route
-		if route.isDefaultDomain():
-			self.__routes.append(route)
-		else:
-			self.__routes.insert(0, route)
+		self.__routes.append(route)
+		self.__sorted = False
 	
 	
 	def removeRoute(self, route):
@@ -42,8 +41,21 @@ class Router:
 			self.addRoute(Route(scanners, domain, port))
 	
 	
+	def __assureSorted(self):
+		if not self.__sorted:
+			self.__routes = sorted(
+				self.__routes,
+				reverse = True,
+				key = lambda x: x.priority()
+			)
+			
+			self.__sorted = True
+	
+	
 	@synchronized_method
 	def scanned(self, scan):
+		self.__assureSorted()
+		
 		for route in self.__routes:
 			if route.match(scan):
 				ret = route.call(scan)
@@ -94,8 +106,8 @@ class Route:
 		self.__port     = port
 	
 	
-	def isDefaultDomain(self):
-		return self.__domain == ""
+	def priority(self):
+		return len(self.__domain)
 	
 	
 	##
