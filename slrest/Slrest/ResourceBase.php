@@ -36,18 +36,18 @@ class ResourceBase extends Tonic\Resource {
 		$set = '';
 		$values = array();
 		
-		foreach($this->cols as $col) {
-			if(isset($this->request->data->$col['name'])) {
-				$values[$col['name']] = $this->request->data->$col['name'];
+		foreach($this->cols as $name => $col) {
+			if(isset($this->request->data->$name)) {
+				$values[$name] = $this->request->data->$name;
 			}
-			else if(isset($_POST[$col['name']])) {
-				$values[$col['name']] = $_POST[$col['name']];
+			else if(isset($_POST[$name])) {
+				$values[$name] = $_POST[$name];
 			}
 			else {
 				continue;
 			}
 			
-			$set .= "`{$col['name']}` = :{$col['name']}, ";
+			$set .= "`{$name}` = :{$name}, ";
 		}
 		
 		return substr($set, 0, -2); 
