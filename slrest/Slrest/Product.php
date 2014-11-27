@@ -12,17 +12,17 @@ class Product extends ResourceBase {
 			$app,
 			$request,
 			$urlParams,
-			"transaction",
+			"product",
 			array(
 				"name"        => array("optional" => true,  "type" => PDO::PARAM_STR),
 				"ean"         => array("optional" => false, "type" => PDO::PARAM_STR),
-				"price"       => array("optional" => true,  "type" => PDO::PARAM_STR),
-				"amount"      => array("optional" => true,  "type" => PDO::PARAM_STR),
+				"price"       => array("optional" => true,  "type" => PDO::PARAM_INT),
+				"amount"      => array("optional" => true,  "type" => PDO::PARAM_INT),
 				"volume"      => array("optional" => true,  "type" => PDO::PARAM_INT),
-				"caffeine"    => array("optional" => true,  "type" => PDO::PARAM_STR),
+				"caffeine"    => array("optional" => true,  "type" => PDO::PARAM_INT),
 				"alcohol"     => array("optional" => true,  "type" => PDO::PARAM_INT),
-				"note"        => array("optional" => true,  "type" => PDO::PARAM_INT),
-				"description" => array("optional" => true,  "type" => PDO::PARAM_INT)
+				"note"        => array("optional" => true,  "type" => PDO::PARAM_STR),
+				"description" => array("optional" => true,  "type" => PDO::PARAM_STR)
 			)
 		);
 	}
