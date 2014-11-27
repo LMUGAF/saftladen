@@ -91,7 +91,7 @@ class XmlPlugin():
 							else:
 								for scannerName in scannersStr.split(","):
 									routeScanners.append(scanners[scannerName])
-							print("Add route for %s of %s for port %s and domain %s" % (name, key, portEl.get("name"), domain))
+							Log.log(Log.LVL_DEBUG1, Log.SRV_MISC, "Add route for %s of %s for port %s and domain %s" % (name, key, portEl.get("name"), domain))
 							route = Route(routeScanners, domain, port)
 							router.addRoute(route)
 				else:
