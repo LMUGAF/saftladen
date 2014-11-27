@@ -17,7 +17,7 @@
 		
 		<stdout>
 			<timeformat>%M:%S</timeformat>
-			<filter level="*" service="*" log="t" />
+			<filter level="Display" service="*" log="t" />
 		</stdout>
 		
 		<syslog>
@@ -135,4 +135,55 @@
 		<fav key="1" value="some/file.ogg" />
 		<fav key="2" value="123" />
 	</mpdhandler>
+	
+	
+	<!-- host:        URL of slrest                                          -->
+	<!-- {userById(uid)}:                                                    -->
+	<!-- {userByName(name)}:                                                 -->
+	<!-- {productByEan(ean)}:                                                -->
+	<!-- {productByNr(nr)}:                                                  -->
+	<!-- {storno}:                                                           -->
+	<!-- {withdraw(amount)}:                                                 -->
+	<!-- {deposit(amount)}:                                                  -->
+	<!-- {logout}:                                                           -->
+	<slhandler name="sl" url="https://example.com/saftladen">
+		<port name="userById">
+			<route domain="000" />
+			<route domain="uid " />
+		</port>
+		
+		<port name="userByName">
+			<route domain="user " />
+		</port>
+		
+		<port name="productByEan">
+			<route domain="" />
+		</port>
+		
+		<port name="productByNr">
+			<route domain="001" />
+			<route domain="product " />
+			<!-- keypad input -->
+		</port>
+		
+		<port name="storno">
+			<route domain="002" />
+			<route domain="storno" />
+		</port>
+		
+		<port name="withdraw">
+			<route domain="003" />
+			<route domain="withdraw " />
+		</port>
+		
+		<port name="deposit">
+			<route domain="004" />
+			<route domain="deposit " />
+		</port>
+		
+		<port name="logout">
+			<route domain="005" />
+			<route domain="logout" />
+		</port>
+	</slhandler>
 </slsd>
