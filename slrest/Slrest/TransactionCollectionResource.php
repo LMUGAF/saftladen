@@ -19,12 +19,43 @@ class TransactionCollectionResource extends Transaction {
 	}
 	
 	
+// 	/**
+// 	 * @uri /transactions
+// 	 * @method POST
+// 	 */
+// 	function buy() {
+// 		$st = $this->db->prepare("INSERT INTO `transaction` SET ".$this->pdoSet($values));
+// 		if(!$st->execute($values)) {
+// 			return new Response(Response::BADREQUEST);
+// 		}
+// 		
+// 		$st = $this->db->prepare("UPDATE `user` SET `total` = `total` + :price WHERE  `id` = :user_id");
+// 		if($st->execute(array(
+// 			'price'   => -$values["price"],
+// 			'user_id' => $values["user_id"]
+// 		))) {
+// 			return new Response(Response::CREATED);
+// 		}
+// 		else {
+// 			return new Response(Response::BADREQUEST);
+// 		}
+// 	}
+	
+	
 	/**
 	 * @method POST
 	 */
 	function add() {
 		$st = $this->db->prepare("INSERT INTO `transaction` SET ".$this->pdoSet($values));
-		if($st->execute($values)) {
+		if(!$st->execute($values)) {
+			return new Response(Response::BADREQUEST);
+		}
+		
+		$st = $this->db->prepare("UPDATE `user` SET `total` = `total` + :price WHERE  `id` = :user_id");
+		if($st->execute(array(
+			'price'   => -$values["price"],
+			'user_id' => $values["user_id"]
+		))) {
 			return new Response(Response::CREATED);
 		}
 		else {
