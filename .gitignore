@@ -39,3 +39,6 @@ nosetests.xml
 *.vpp~*
 
 /CACHEDIR.TAG
+
+*~
+*.swp
