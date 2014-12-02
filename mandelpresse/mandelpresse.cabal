@@ -6,6 +6,7 @@ version: 0.1.0
 
 executable mandelpresse
   main-is: Main.hs
+  ghc-options: -threaded
   build-depends:
     base,
     aeson,
@@ -13,4 +14,8 @@ executable mandelpresse
     bytestring,
     http-conduit,
     transformers,
-    unordered-containers
+    unordered-containers,
+    http-types,
+    vty,
+    vty-ui,
+    data-default
