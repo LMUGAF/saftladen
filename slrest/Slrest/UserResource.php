@@ -62,6 +62,6 @@ class UserResource extends User {
 	function remove() {
 // 		$ds = $this->container['dataStore'];
 // 		$ds->delete($this->id);
-		return new Tonic\Response(Tonic\Response::NOCONTENT);
+		return new Response(Response::NOCONTENT);
 	}
 }
