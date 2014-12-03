@@ -18,4 +18,5 @@ executable mandelpresse
     http-types,
     vty,
     vty-ui,
-    data-default
+    data-default,
+    attoparsec

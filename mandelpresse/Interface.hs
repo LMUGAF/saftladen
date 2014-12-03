@@ -4,26 +4,66 @@ module Interface where
 import REST
 import Types
 
+import Control.Applicative
 import Control.Monad
+import Data.Attoparsec.Text
 import Data.Default
 import qualified Data.Text as T
 import Graphics.Vty.Input.Events
 import Graphics.Vty.Widgets.All
+import Prelude hiding (take)
+
+type EAN = Integer
+
+data InputType = InputUID Integer
+               | InputUser String
+               | InputEAN EAN
+               | InputDeposit Integer
+               | InputLogout
+                 deriving Show
+
+inputParser :: Parser InputType
+inputParser =
+      (liftM (InputDeposit) ("deposit" *> skipSpace *> decimal))
+  <|> (liftM (InputUser . T.unpack) ("user" *> skipSpace *> takeText))
+  <|> (liftM (InputEAN . read . T.unpack) ((take 13) <|> (take 8)))
+  <|> (liftM (InputUID . read) (many digit))
+  <|> ("deposit" *> return InputLogout)
+
+parseInput :: T.Text -> Either String InputType
+parseInput = parseOnly (inputParser <* endOfInput)
+
+--loginUID :: Integer -> IO ()
+loginUID = undefined
+
+--loginUser :: String -> IO ()
+loginUser = undefined
+
+--showProductInfo :: EAN -> IO ()
+showProductInfo = undefined
 
 mainScreen = do
-  e1 <- hFixed 4 =<< editWidget
+  e1 <- editWidget
   msg <- plainText "        saftladen / mandelpresse\n\
                     \            version 0.1\n\
                     \\n\
                     \type your number or scan your login code\n\
                     \\n\
                     \        press v to list products\n\n"
-  e <- vCentered =<< (hCentered msg) <--> (hCentered e1)
+  e <- vCentered =<< (hCentered msg) <--> (hCentered =<< hFixed 4 e1)
 
   fg <- newFocusGroup
   addToFocusGroup fg e1
 
-  -- onActivate
+  onActivate e1 (\this -> do
+                   input <- getEditText this
+                   case parseInput input of
+                     (Left e)              -> return ()
+                     (Right (InputUID id)) -> loginUID id
+                     (Right (InputUser s)) -> loginUser s
+                     (Right (InputEAN  p)) -> showProductInfo p
+                     otherwise             -> return ()
+                   )
 
   return (e,fg)
 
