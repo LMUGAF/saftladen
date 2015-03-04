@@ -1,0 +1,14 @@
+## This file belongs into /etc/systemd/system
+[Unit]
+Description=SaftLaden User Terminal
+
+
+[Service]
+ExecStart=/opt/saftladen/slut/slut
+WorkingDirectory=/opt/saftladen/slut
+Restart=on-failure
+Type=simple
+
+
+[Install]
+WantedBy=multi-user.target
