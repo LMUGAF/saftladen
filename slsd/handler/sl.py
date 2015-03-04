@@ -81,13 +81,13 @@ class SlThread(threading.Thread):
 		else:
 			Log.log(
 				Log.LVL_DISPLAY, Log.SRV_DEB_H,
-				"Nice scan (%s, %s), but not now!" % (msg.action, msg.code)
+				"Unknown scan (%s, %s)" % (msg.action, msg.code)
 			)
 			return
 		
 		Log.log(
 			Log.LVL_DISPLAY, Log.SRV_DEB_H,
-			"Hi %s, you have %0.2f₲" % (user.name, user.total/100)
+			"Hi %s, you have %0.2f€" % (user.name, user.total/100)
 		)
 		
 		
@@ -133,7 +133,7 @@ class SlThread(threading.Thread):
 			
 			Log.log(
 				Log.LVL_DISPLAY, Log.SRV_DEB_H,
-				"You bought %s for %0.2f₲" % (p.name, p.price/100)
+				"You bought %s for %0.2f€" % (p.name, p.price/100)
 			)
 			
 			return True
@@ -152,7 +152,7 @@ class SlThread(threading.Thread):
 			
 			Log.log(
 				Log.LVL_DISPLAY, Log.SRV_DEB_H,
-				"Now you have %0.2f₲ %s" % (abs(msg.code)/100, "more" if msg.code > 0 else "less")
+				"Now you have %0.2f€ %s" % (abs(msg.code)/100, "more" if msg.code > 0 else "less")
 			)
 			
 			return True

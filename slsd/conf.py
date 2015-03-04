@@ -17,9 +17,10 @@ class XmlMetaPlugin(type):
 			
 			if not hasattr(XmlMetaPlugin, '_elNames'):
 				XmlMetaPlugin._elNames = ["log", "user", "group", "pidfile", "errfile"]
-			else:
-				if self.elName in XmlMetaPlugin._elNames:
-					raise Exception("There is already a registered XML element \"%s\"" % self.elName)
+			
+			elif self.elName in XmlMetaPlugin._elNames:
+				raise Exception("There is already a registered XML element \"%s\"" % self.elName)
+			
 			XmlMetaPlugin._elNames.append(self.elName)
 			Log.log(
 				Log.LVL_INFO,

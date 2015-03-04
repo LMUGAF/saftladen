@@ -21,6 +21,9 @@ http://www.linuxquestions.org/questions/programming-9/read-from-a-usb-barcode-sc
 http://www.thelinuxdaily.com/2010/05/grab-raw-keyboard-input-from-event-device-node-devinputevent/
 http://code.metager.de/source/xref/linux/udev/src/keymap/keymap.c#print_key
 http://lxr.free-electrons.com/source/drivers/hid/hid-input.c
+
+XKeycodeToKeysym
+http://fossies.org/dox/kbd-2.0.2/ksyms_8c.html#ac364af899b38e70b05bec9750d022da2
 */
  
 int
