@@ -2,7 +2,8 @@ from datetime import datetime
 from threading import Lock
 import syslog
 import aux
-
+import os
+import stat
 
 
 
@@ -106,19 +107,37 @@ class LogSink:
 
 
 class LogFullColorSink(LogSink):
+	def __init__(self, onlyMsg = False):
+		LogSink.__init__(self)
+		
+		self.timeFmt = None
+		self.onlyMsg = onlyMsg
+	
 	def setTimeFormat(self, fmt = '%Y-%m-%d %H:%M:%S'):
 		self.timeFmt = fmt
 	
+	def setOnlyMsg(self, onlyMsg = True):
+		self.onlyMsg = onlyMsg
+	
 	
 	def execLog(self, level, service, msg):
-		timeStamp = datetime.now().strftime(self.timeFmt)
-		self.write("  ".join((timeStamp, str(level), str(service), msg)))
+		elements = []
+		if self.timeFmt is not None:
+			elements.append(datetime.now().strftime(self.timeFmt))
+		
+		if self.onlyMsg == False:
+			elements.append(str(level))
+			elements.append(str(service))
+		
+		elements.append(msg)
+		
+		self.write("  ".join(elements))
 
 
 
 class LogFileSink(LogFullColorSink):
-	def __init__(self, path, mode = None, user = None, group = None):
-		LogSink.__init__(self)
+	def __init__(self, path, mode = None, user = None, group = None, onlyMsg = False):
+		LogFullColorSink.__init__(self, onlyMsg)
 		
 		self.path = path
 		self.mode = mode
@@ -136,8 +155,11 @@ class LogFileSink(LogFullColorSink):
 				self.logfile.close()
 			
 			## buffersize "1" means "line buffered"
-			self.logfile = open(self.path, 'a', 1)
-			aux.setFileAccess(self.path, self.mode, self.user, self.group)
+			if os.path.exists(self.path) and stat.S_ISFIFO(os.stat(self.path).st_mode):
+				self.logfile = open(self.path, 'w', 1)
+			else:
+				self.logfile = open(self.path, 'a', 1)
+				aux.setFileAccess(self.path, self.mode, self.user, self.group)
 	
 	
 	def write(self, line):

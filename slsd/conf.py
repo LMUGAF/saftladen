@@ -175,7 +175,8 @@ def logFileSinks(tree):
 			element.get("path"),
 			element.get("mode"),
 			element.get("user"),
-			element.get("group")
+			element.get("group"),
+			boolAttrib(element, "onlymsg", False)
 		)
 		logSink(element, sink)
 
