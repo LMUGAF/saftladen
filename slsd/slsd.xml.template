@@ -29,6 +29,7 @@
 	
 	<!-- SCANNERS -->
 	<stdinscanner />
+	<serialscanner />
 	
 	
 	
