@@ -1,0 +1,15 @@
+[Unit]
+Description=SaftLaden Scanner Daemon
+After=slut.service
+
+
+[Service]
+Type=simple
+ExecStart=/opt/saftladen/slsd/slsd -n
+ExecStop=/usr/bin/killall -9 -u slsd slsd
+Restart=on-failure
+User=slsd
+
+
+[Install]
+WantedBy=multi-user.target
